@@ -1,0 +1,64 @@
+/* Pointer motion uses individual transforms so the hero's GSAP transform stays independent. */
+.yuri-pointer {
+  position:fixed; inset:0; z-index:10000; pointer-events:none;
+  opacity:0; mix-blend-mode:difference; transition:opacity .25s ease;
+}
+.yuri-pointer.is-visible { opacity:1; }
+.yuri-pointer canvas { position:absolute; inset:0; display:block; }
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  :is(.home-page,.project-page) ::selection { background:#2b5fff; color:#fff; }
+  html.yuri-pointer-ready, html.yuri-pointer-ready body, html.yuri-pointer-ready body * { cursor:none !important; }
+  html.yuri-pointer-ready dialog[open], html.yuri-pointer-ready dialog[open] * { cursor:auto !important; }
+  html.yuri-pointer-ready dialog[open] a, html.yuri-pointer-ready dialog[open] button { cursor:pointer !important; }
+  .yuri-magnet-target {
+    position:relative;
+    scale:var(--pop-sx,1) var(--pop-sy,1) !important;
+    translate:calc(var(--pull-x,0) * 1px) calc(var(--pull-y,0) * 1px) !important;
+  }
+  .yuri-magnet-fillable {
+    isolation:isolate; overflow:hidden;
+    transition:color .4s cubic-bezier(.65,0,.35,1),box-shadow .3s ease !important;
+  }
+  .yuri-magnet-target.yuri-magnet-filled {
+    color:var(--pointer-fill-text) !important;
+    outline:1.5px solid var(--pointer-ring,transparent);
+    outline-offset:-1.5px;
+  }
+  .yuri-blue-fill.yuri-magnet-filled {
+    border-color:transparent !important;
+    outline-color:transparent !important;
+    box-shadow:none !important;
+  }
+  .yuri-magnet-fill {
+    position:absolute; z-index:-1; border-radius:50%; pointer-events:none; scale:0;
+  }
+  /* Keep filter hit areas fixed; only their contents pop and follow the pointer. */
+  .yuri-magnet-filter {
+    scale:1 !important;
+    translate:none !important;
+  }
+  .yuri-magnet-filter > .yuri-magnet-fill {
+    inset:0;
+    width:auto;
+    height:auto;
+    border-radius:0;
+    transform:none !important;
+    scale:none !important;
+    translate:none !important;
+  }
+  .yuri-magnet-mover {
+    display:flex;
+    width:100%;
+    min-width:0;
+    align-items:center;
+    justify-content:center;
+    gap:inherit;
+    pointer-events:none;
+    scale:var(--pop-sx,1) var(--pop-sy,1);
+    translate:calc(var(--pull-x,0) * 1px) calc(var(--pull-y,0) * 1px);
+  }
+}
+@media (prefers-reduced-motion:reduce), (hover:none), (pointer:coarse) {
+  .yuri-pointer { display:none; }
+}
+@media print { .yuri-pointer { display:none; } }
